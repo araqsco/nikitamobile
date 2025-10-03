@@ -13,11 +13,28 @@
 
 # Examples
 
-...........
-...........
-...........
-...........
-...........
+> Sending sms
+
+```ts
+import { NM } from "nikitamobile"
+
+const messageId = crypto.randomUUID()
+await NM.send({
+    messages: [
+        {
+            recipient: "37499454545",
+            messageId,
+            sms: {
+                originator: "Acme",
+                ttl: 300,
+                content: {
+                    text: "Welcome!"
+                }
+            }
+        }
+    ]
+})
+```
 
 # Contributing
 
