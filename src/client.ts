@@ -8,6 +8,7 @@ export const NM = new Proxy<NMTypes.Client>({} as NMTypes.Client, {
 		}
 		return async (request: unknown, options?: NMTypes.Options) => {
 			const config = NMHelpers.getConfig(options);
+			const auth = `Basic ${config.username}:${config.password}`;
 			const body = JSON.stringify(objectFromCamelCaseToKebabCase(request));
 
 			const response = await fetch(`${config.baseUrl}/${key}`, {
@@ -15,6 +16,7 @@ export const NM = new Proxy<NMTypes.Client>({} as NMTypes.Client, {
 				body,
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: auth,
 				},
 			}).then((response) => response.json());
 

@@ -50,7 +50,9 @@ export namespace NMHelpers {
 
 	export function getConfig(options?: NMTypes.Options) {
 		return {
-			baseUrl: ""
-		}
+			baseUrl: options?.baseUrl ?? process.env.NIKITA_MOBILE_BASE_URL!,
+			username: options?.username ?? process.env.NIKITA_MOBILE_USERNAME!,
+			password: options?.password ?? process.env.NIKITA_MOBILE_PASSWORD!,
+		};
 	}
 }

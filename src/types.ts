@@ -13,7 +13,11 @@ export namespace NMTypes {
 		): Promise<GetStatusResponse>;
 	};
 
-	export type Options = {};
+	export type Options = {
+		baseUrl?: string
+		username?: string
+		password?: string
+	};
 
 	export type SendRequest = {
 		/**
