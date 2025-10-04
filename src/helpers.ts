@@ -49,8 +49,9 @@ export namespace NMHelpers {
 	}
 
 	export function getConfig(options?: NMTypes.Options) {
+		const defaultUrl = "https://sendsms.nikita.am/broker-api/send"
 		return {
-			baseUrl: options?.baseUrl ?? process.env.NIKITA_MOBILE_BASE_URL!,
+			baseUrl: options?.baseUrl ?? process.env.NIKITA_MOBILE_BASE_URL! ?? defaultUrl,
 			username: options?.username ?? process.env.NIKITA_MOBILE_USERNAME!,
 			password: options?.password ?? process.env.NIKITA_MOBILE_PASSWORD!,
 		};
