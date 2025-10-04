@@ -9,6 +9,7 @@
 | NIKITA_MOBILE_BASE_URL | no       |
 | NIKITA_MOBILE_USERNAME | yes      |
 | NIKITA_MOBILE_PASSWORD | yes      |
+| NIKITA_MOBILE_LOGGING  | no       |
 
 > Use `NIKITA_MOBILE_BASE_URL` environment variable to change the base URL of the requests
 > By default it is [https://sendsms.nikita.am/broker-api/send]

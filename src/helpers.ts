@@ -54,6 +54,7 @@ export namespace NMHelpers {
 			baseUrl: options?.baseUrl ?? process.env.NIKITA_MOBILE_BASE_URL! ?? defaultUrl,
 			username: options?.username ?? process.env.NIKITA_MOBILE_USERNAME!,
 			password: options?.password ?? process.env.NIKITA_MOBILE_PASSWORD!,
+			logging: options?.logging ?? Boolean(process.env.NIKITA_MOBILE_LOGGING)
 		};
 	}
 }

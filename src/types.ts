@@ -17,6 +17,7 @@ export namespace NMTypes {
 		baseUrl?: string
 		username?: string
 		password?: string
+		logging?: boolean
 	};
 
 	export type SendRequest = {

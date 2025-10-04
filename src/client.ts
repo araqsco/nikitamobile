@@ -8,9 +8,15 @@ export const NM = new Proxy<NMTypes.Client>({} as NMTypes.Client, {
 		}
 		return async (request: unknown, options?: NMTypes.Options) => {
 			const config = NMHelpers.getConfig(options);
-			const auth = `Basic ${config.username}:${config.password}`;
+			const basicAuth = btoa(`${config.username}:${config.password}`)
+
+			const auth = `Basic ${basicAuth}`;
 			const body = JSON.stringify(objectFromCamelCaseToKebabCase(request));
 
+			if (config.logging) {
+				console.debug("NM:path", key)
+				console.debug("NM:body", body)
+			}
 			const response = await fetch(`${config.baseUrl}/${key}`, {
 				method: "POST",
 				body,
@@ -18,7 +24,17 @@ export const NM = new Proxy<NMTypes.Client>({} as NMTypes.Client, {
 					"Content-Type": "application/json",
 					Authorization: auth,
 				},
-			}).then((response) => response.json());
+			}).then(async (response) => {
+				if (!response.ok) {
+					if (config.logging) {
+						console.error("NM:status", response.status)
+					}
+					throw new Error(await response.text().catch((e) => e));
+				}
+				const content = await response.text()
+				console.debug("NM:response", content)
+				return JSON.parse(content)
+			});
 
 			return objectFromKebabCaseToCamelCase(response);
 		};
