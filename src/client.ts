@@ -8,14 +8,14 @@ export const NM = new Proxy<NMTypes.Client>({} as NMTypes.Client, {
 		}
 		return async (request: unknown, options?: NMTypes.Options) => {
 			const config = NMHelpers.getConfig(options);
-			const basicAuth = btoa(`${config.username}:${config.password}`)
+			const basicAuth = btoa(`${config.username}:${config.password}`);
 
 			const auth = `Basic ${basicAuth}`;
 			const body = JSON.stringify(objectFromCamelCaseToKebabCase(request));
 
 			if (config.logging) {
-				console.debug("NM:path", key)
-				console.debug("NM:body", body)
+				console.debug("NM:path", key);
+				console.debug("NM:body", body);
 			}
 			const response = await fetch(`${config.baseUrl}/${key}`, {
 				method: "POST",
@@ -27,13 +27,22 @@ export const NM = new Proxy<NMTypes.Client>({} as NMTypes.Client, {
 			}).then(async (response) => {
 				if (!response.ok) {
 					if (config.logging) {
-						console.error("NM:status", response.status)
+						console.error("NM:status", response.status);
 					}
 					throw new Error(await response.text().catch((e) => e));
 				}
-				const content = await response.text()
-				console.debug("NM:response", content)
-				return JSON.parse(content)
+				const content = await response.text();
+				if (config.logging) {
+					console.debug("NM:response", content);
+				}
+				try {
+					return JSON.parse(content);
+				} catch {
+					if (config.logging) {
+						console.debug("NM:not-json")
+					}
+					return content;
+				}
 			});
 
 			return objectFromKebabCaseToCamelCase(response);
@@ -42,12 +51,12 @@ export const NM = new Proxy<NMTypes.Client>({} as NMTypes.Client, {
 });
 
 function camelCaseToKebabCase(key: string) {
-	key
+	return key
 		.split("")
 		.map((c) => {
 			const isUpperCase = c.toLocaleUpperCase() === c;
 			if (isUpperCase) {
-				return "-" + c;
+				return "-" + c.toLocaleLowerCase();
 			} else {
 				return c;
 			}
@@ -56,7 +65,7 @@ function camelCaseToKebabCase(key: string) {
 }
 
 function kebabCaseToCamelCase(key: string) {
-	key
+	return key
 		.split("-")
 		.map((k, i) => {
 			if (!k) {
